@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chronos — Organizador de Rotina</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Three.js para Objetos 3D ao Fundo -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+
+  <!-- Canvas do Fundo 3D -->
+  <canvas id="bg3d"></canvas>
+
+  <!-- Overlay para escurecer o fundo mantendo o degradê -->
+  <div class="overlay"></div>
+
+  <!-- Conteúdo Principal -->
+  <main class="container">
+    <header class="header">
+      <h1 class="title">Chronos</h1>
+      <p class="subtitle">Organizador de Rotina Semanal (Segunda a Sexta)</p>
+    </header>
+
+    <!-- Grid de Cards de Rotina -->
+    <section class="grid-cards">
+      
+      <!-- Card 1: Escola -->
+      <article class="card" onclick="openModal('escola')">
+        <div class="card-glass">
+          <span class="badge">Estudo</span>
+          <h2 class="card-title">Escola</h2>
+          <p class="card-time">⏰ 07:00 - 12:00</p>
+          <div class="card-footer">
+            <span class="btn-detail">Ver Detalhes ➜</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 2: Almoço -->
+      <article class="card" onclick="openModal('almoco')">
+        <div class="card-glass">
+          <span class="badge">Saúde & Lazer</span>
+          <h2 class="card-title">Almoço</h2>
+          <p class="card-time">⏰ 12:00 - 13:00</p>
+          <div class="card-footer">
+            <span class="btn-detail">Ver Detalhes ➜</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 3: Trabalho -->
+      <article class="card" onclick="openModal('trabalho')">
+        <div class="card-glass">
+          <span class="badge">Trabalho</span>
+          <h2 class="card-title">Trabalho</h2>
+          <p class="card-time">⏰ 13:15 - 18:00</p>
+          <div class="card-footer">
+            <span class="btn-detail">Ver Detalhes ➜</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 4: Curso -->
+      <article class="card" onclick="openModal('curso')">
+        <div class="card-glass">
+          <span class="badge">Hobby & Estudo</span>
+          <h2 class="card-title">Curso</h2>
+          <p class="card-time">⏰ 18:30 - 20:30</p>
+          <div class="card-footer">
+            <span class="btn-detail">Ver Detalhes ➜</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 5: Academia -->
+      <article class="card" onclick="openModal('academia')">
+        <div class="card-glass">
+          <span class="badge">Esportes & Saúde</span>
+          <h2 class="card-title">Academia</h2>
+          <p class="card-time">⏰ 20:40 - 21:30</p>
+          <div class="card-footer">
+            <span class="btn-detail">Ver Detalhes ➜</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 6: Janta -->
+      <article class="card" onclick="openModal('janta')">
+        <div class="card-glass">
+          <span class="badge">Saúde & Lazer</span>
+          <h2 class="card-title">Janta</h2>
+          <p class="card-time">⏰ 22:00 - 23:00</p>
+          <div class="card-footer">
+            <span class="btn-detail">Ver Detalhes ➜</span>
+          </div>
+        </div>
+      </article>
+
+    </section>
+  </main>
+
+  <!-- Modal -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal()">&times;</span>
+      <h2 id="modal-title">Título da Rotina</h2>
+      <p id="modal-time" class="modal-time"></p>
+      <p id="modal-desc" class="modal-desc"></p>
+      <a id="modal-link" href="#" class="btn-page">Acessar Página Exclusiva ➔</a>
+    </div>
+  </div>
+
+  <!-- JavaScript Incorporado -->
+  <script>
+    // Dados das Rotinas para o Modal
+    const rotinas = {
+      escola: {
+        titulo: "Escola",
+        horario: "07:00h às 12:00h (Segunda a Sexta)",
+        descricao: "Foco no aprendizado de disciplinas essenciais, atividades acadêmicas, desenvolvimento de habilidades sociais e preparação para testes e exames.",
+        link: "escola.html"
+      },
+      almoco: {
+        titulo: "Almoço",
+        horario: "12:00h às 13:00h (Segunda a Sexta)",
+        descricao: "Pausa necessária para refeição nutritiva, descanso da rotina matinal e recarga de energia para o turno da tarde.",
+        link: "almoco.html"
+      },
+      trabalho: {
+        titulo: "Trabalho",
+        horario: "13:15h às 18:00h (Segunda a Sexta)",
+        descricao: "Desenvolvimento profissional, execução de tarefas diárias, reuniões de equipe e entregas de projetos organizacionais.",
+        link: "trabalho.html"
+      },
+      curso: {
+        titulo: "Curso de Especialização",
+        horario: "18:30h às 20:30h (Segunda a Sexta)",
+        descricao: "Aprimoramento técnico e prático na área de interesse (tecnologia, idiomas, artes ou cursos profissionalizantes).",
+        link: "curso.html"
+      },
+      academia: {
+        titulo: "Academia & Exercícios",
+        horario: "20:40h às 21:30h (Segunda a Sexta)",
+        descricao: "Treino diário de força e cardio para manutenção da saúde física, liberação de endorfina e alívio do estresse diário.",
+        link: "academia.html"
+      },
+      janta: {
+        titulo: "Janta & Descanso",
+        horario: "22:00h às 23:00h (Segunda a Sexta)",
+        descricao: "Refeição noturna leve, momentos de lazer individual ou com a família e preparação para uma boa noite de sono.",
+        link: "janta.html"
+      }
+    };
+
+    // Funções do Modal
+    function openModal(chave) {
+      const data = rotinas[chave];
+      if (!data) return;
+
+      document.getElementById('modal-title').innerText = data.titulo;
+      document.getElementById('modal-time').innerText = "⏰ " + data.horario;
+      document.getElementById('modal-desc').innerText = data.descricao;
+      document.getElementById('modal-link').href = data.link;
+
+      const modal = document.getElementById('modal');
+      modal.classList.add('active');
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('modal');
+      modal.classList.remove('active');
+    }
+
+    // Fechar ao clicar fora do modal
+    window.onclick = function(event) {
+      const modal = document.getElementById('modal');
+      if (event.target === modal) {
+        closeModal();
+      }
+    };
+
+    // --- ANIMAÇÃO 3D DO FUNDO (Three.js) ---
+    const canvas = document.getElementById('bg3d');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+
+    // Criando objetos 3D flutuantes (Cubos, Torus, Octaedros)
+    const shapes = [];
+    const geometries = [
+      new THREE.IcosahedronGeometry(1.2, 0),
+      new THREE.TorusGeometry(1, 0.4, 16, 100),
+      new THREE.OctahedronGeometry(1.3, 0),
+      new THREE.TetrahedronGeometry(1.4, 0)
+    ];
+
+    // Cores em tom degradê vibrante (Ciano, Roxo, Magenta)
+    const colors = [0x00f2fe, 0x7f00ff, 0xff007f];
+
+    for (let i = 0; i < 25; i++) {
+      const geom = geometries[Math.floor(Math.random() * geometries.length)];
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const material = new THREE.MeshStandardMaterial({
+        color: color,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.6
+      });
+
+      const mesh = new THREE.Mesh(geom, material);
+      mesh.position.x = (Math.random() - 0.5) * 30;
+      mesh.position.y = (Math.random() - 0.5) * 30;
+      mesh.position.z = (Math.random() - 0.5) * 20 - 5;
+
+      mesh.rotSpeedX = (Math.random() - 0.5) * 0.02;
+      mesh.rotSpeedY = (Math.random() - 0.5) * 0.02;
+      mesh.floatSpeed = (Math.random() * 0.005) + 0.002;
+
+      scene.add(mesh);
+      shapes.push(mesh);
+    }
+
+    // Luzes
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+    scene.add(ambientLight);
+
+    const pointLight = new THREE.PointLight(0x00f2fe, 2, 50);
+    pointLight.position.set(10, 10, 10);
+    scene.add(pointLight);
+
+    camera.position.z = 15;
+
+    // Loop de Animação
+    function animate() {
+      requestAnimationFrame(animate);
+
+      shapes.forEach(shape => {
+        shape.rotation.x += shape.rotSpeedX;
+        shape.rotation.y += shape.rotSpeedY;
+        shape.position.y += Math.sin(Date.now() * shape.floatSpeed) * 0.01;
+      });
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    // Redimensionamento
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>
